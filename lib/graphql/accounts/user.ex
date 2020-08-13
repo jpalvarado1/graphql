@@ -24,12 +24,17 @@ defmodule Graphql.Accounts.User do
     |> validate_length(:username, min: 6, max: 20)
     |> validate_length(:password, min: 6, max: 16)
     |> validate_confirmation(:password)
-    |> unique_contraint(:username)
-    |> unique_contraint(:email)
+    |> unique_constraint(:username)
+    |> unique_constraint(:email)
     |> hash_password
   end
 
+  defp hash_password(%Ecto.Changeset{valid?: true, changes:
+    %{password: password}} = changeset) do
+    change(changeset, Argon2.add_hash(password))    
+  end
+
   defp hash_password(changeset) do
-    changeset    
+    changeset
   end
 end
