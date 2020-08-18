@@ -3,13 +3,14 @@ defmodule Graphql.Accounts.User do
   import Ecto.Changeset
 
   schema "users" do
-    field(:email, :string, unique: true)
+    field(:username, :string, unique: true)
     field(:name, :string)
+    field(:email, :string, unique: true)
     field(:password_hash, :string)
     field(:password, :string, virtual: true)
     field(:password_confirmation, :string, virtual: true)
     field(:role, :string, default: "user")
-    field(:username, :string, unique: true)
+
 
     timestamps()
   end
@@ -31,7 +32,7 @@ defmodule Graphql.Accounts.User do
 
   defp hash_password(%Ecto.Changeset{valid?: true, changes:
     %{password: password}} = changeset) do
-    change(changeset, Argon2.add_hash(password))    
+    change(changeset, Argon2.add_hash(password))
   end
 
   defp hash_password(changeset) do
