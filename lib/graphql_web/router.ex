@@ -3,15 +3,16 @@ defmodule GraphqlWeb.Router do
 
   pipeline :api do
     plug(:accepts, ["json"])
+
   end
 
   scope "/api" do
     pipe_through(:api)
 
-    forward "/", Absinthe.Plug, schema: MediumGraphqlApiWeb.Schema
-    
-    if Mix.env() in [:dev, :test] do
-      forward "/graphiql", Absinthe.Plug.GraphiQL, schema: MediumGraphqlApiWeb.Schema
+    forward("/graphql", Absinthe.Plug, schema: GraphqlWeb.Schema)
+
+    if Mix.env() == :dev do
+      forward("/graphiql", Absinthe.Plug.GraphiQL, schema: GraphqlWeb.Schema)
     end
   end
 
