@@ -3,7 +3,8 @@ defmodule Graphql.Accounts.Session do
   alias Graphql.Repo
 
   def authenticate(args) do
-    user = Repo.get_by(User, username: (args.username))
+    user = Repo.get_by(User, username: args.username)
+
     case check_password(user, args) do
       true -> {:ok, user}
       _ -> {:error, "Incorrect login credentials"}
@@ -12,8 +13,8 @@ defmodule Graphql.Accounts.Session do
 
   defp check_password(user, args) do
     case user do
-      nil -> Argon2.no_user_verify()
-      _ -> Argon2.check_pass(args.password, user.password_hash)
+      nil -> Argon2.dummy_check_pass  ()
+      _ -> Argon2.check_pass(user, args.password)
     end
   end
 end
