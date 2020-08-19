@@ -11,7 +11,6 @@ defmodule Graphql.Accounts.User do
     field(:password_confirmation, :string, virtual: true)
     field(:role, :string, default: "user")
 
-
     timestamps()
   end
 
@@ -26,7 +25,6 @@ defmodule Graphql.Accounts.User do
     |> validate_length(:password, min: 6, max: 16)
     |> validate_confirmation(:password)
     |> unique_constraint(:username)
-    |> unique_constraint(:email)
     |> hash_password
   end
 
